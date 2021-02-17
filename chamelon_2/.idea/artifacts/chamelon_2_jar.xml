@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact name="chamelon_2:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/chamelon_2_jar</output-path>
+    <root id="root">
+      <element id="archive" name="chamelon_2.jar">
+        <element id="module-output" name="chamelon_2" />
+      </element>
+      <element id="library" level="project" name="analyzers-common" />
+      <element id="library" level="project" name="lucene-core-8.3.0" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/src/Bean/HospitalBean.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/Bean/Violation.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/FileOption/FileOptionUtil.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/FileOption/FileParams.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/FileOption/FileReaderByParams.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/IndexOption/IndexSet.java" charset="UTF-8" />
+    <file url="PROJECT" charset="GBK" />
+  </component>
+</project>

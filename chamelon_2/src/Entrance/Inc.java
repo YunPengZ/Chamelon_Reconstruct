@@ -12,6 +12,9 @@ import Util.Tools;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import static Util.Tools.*;
 
 public class Inc {
     String rootPath;
@@ -57,11 +60,34 @@ public class Inc {
         System.out.println("inc sz"+indexSet.fileReaderByParams.incList.size());
         IncDetection incDetection = new IncDetection();
         incDetection.detect(violationList,indexSet,type,byIndex,onlyDelta,print);
+        int dSZInt = fileReaderByParams.originIdList.size();
+        int i = 0;
+        for(Violation violation:violationList){
+            String dc = fileReaderByParams.dcs.get(violation.getDc());
+            int left = violation.getFirst()-dSZInt;
+            int right = violation.getSecond()-dSZInt;
+            for(String atom:dc.split("&")){
+                String firstAttr = getAttrByPre(atom,1);
+                String secondAttr = getAttrByPre(atom,2);
+                String firstVal = getValueByAttr(fileReaderByParams.incList.get(left),firstAttr,table);
+                String secondVal = getValueByAttr(fileReaderByParams.incList.get(right),secondAttr,table);
+                if (!satisfyAtom(firstVal,secondVal,atom)){
+                    System.out.println(firstVal+",right:"+secondVal+",dc:"+dc+",atom"+atom);
+                    i++;
+
+                }
+            }
+        }
+        System.out.println(i);
         Repair repair = new Repair(Integer.parseInt(errorRate),errorAttrNum);
         if(repairType!=0)repair.run(indexSet,violationList,repairType);
         //holistic Ëã·¨
 //        holistic(list,increList,d_id_list,incre_id_list,sub_violations_map,index_params_map,params_map,index_type,tree_params,
 //                dcs,listsz,total_lilst,cellRepairs,equivalence_index,iter,table,dirty_list,clean_list,error_rate);
+    }
+
+    private void checkViolation(List<Violation> violationList, List<String> dcMap) {
+
     }
 
     private List<String> readDC(String rootPath, String table) {

@@ -87,6 +87,14 @@ public class IncDetection {
 
     }
 
+    /**
+     *
+     * type = 1:naive
+     * type = 2:IEJoin
+     * type = 3:treeArray
+     * type = 4:vioFinder
+     * type = 5£ºtreeArray-dump
+     */
     private void detectInDeltaInEqual(List<Violation> violationList, IndexSet indexSet, List<Integer> incIdList, Set<String> otherAtomSet, String table, boolean print, int dcId, int type) {
         int numericCnt = 0;
         String oneTuple = "";
@@ -115,12 +123,15 @@ public class IncDetection {
             IEJoinInDelta ieJoinInDelta = new IEJoinInDelta();
             ieJoinInDelta.detect(violationList,indexSet.fileReaderByParams,incIdList,otherAtomSet,table,dcId);
             buildIndexTimeCost += ieJoinInDelta.getBuildIndexTime();
-        }else if(type==3){
-            TreeArrayInDetal treeArrayInDetal = new TreeArrayInDetal(print);
+        }else if(type==3||type==5){
+            boolean useDump = false;
+            if(type==5){
+                useDump = true;
+            }
+            TreeArrayInDetal treeArrayInDetal = new TreeArrayInDetal(print,useDump);
+
             treeArrayInDetal.detect(violationList,indexSet.fileReaderByParams,incIdList,otherAtomSet,table,dcId);
             buildIndexTimeCost += treeArrayInDetal.getBuildIndexTime();
-        }else if(type==4){
-
         }
 //        for(Violation violation:violationList){
 //            System.out.println(tools.getObj(indexSet,violation.getFirst()).toString()+tools.getObj(indexSet,violation.getSecond()));

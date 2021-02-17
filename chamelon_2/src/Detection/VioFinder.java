@@ -116,9 +116,16 @@ public class VioFinder {
     }
 
     private void buildSortedMap(Map<Integer,List<Integer>> sortedMap,FileReaderByParams fileReaderByParams,List<Integer> incIdList, String attr) {
-        long start = System.currentTimeMillis();
+        //long start = System.currentTimeMillis();
+        long start, end;
+        // System.out.println(incIdList.size()+":"+incIdList.toString());
+        //System.out.println(fileReaderByParams.incList.size());
+        //System.out.println(fileReaderByParams.incList.get(0));
         for(Integer tupleId:incIdList){
+            start = System.currentTimeMillis();
             int val = Integer.parseInt(tools.getValueByAttr(fileReaderByParams.incList.get(tupleId),attr,fileReaderByParams.fileParams.table));
+            // int val = tools.getIntValueByAttr(fileReaderByParams.incList.get(tupleId),attr,fileReaderByParams.fileParams.table);
+            // start = System.currentTimeMillis();
             if(sortedMap.containsKey(val)){
                 sortedMap.get(val).add(tupleId);
             }else{
@@ -126,9 +133,11 @@ public class VioFinder {
                 temp.add(tupleId);
                 sortedMap.put(val,temp);
             }
+            end = System.currentTimeMillis();
+            this.buildIndexTimeCost +=(end-start);
         }
-        long end = System.currentTimeMillis();
-        this.buildIndexTimeCost +=(end-start);
+        //long end = System.currentTimeMillis();
+        //this.buildIndexTimeCost +=(end-start);
     }
 
     public long getBuildIndexTime() {

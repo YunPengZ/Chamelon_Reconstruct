@@ -4,7 +4,6 @@ import Bean.FlightBean;
 import Bean.HospitalBean;
 import Bean.SPStockBean;
 import Bean.TaxBean;
-import FileOption.FileReaderByParams;
 import IndexOption.IndexSet;
 import javafx.util.Pair;
 
@@ -41,7 +40,7 @@ public class Tools implements Serializable {
         }
         return id_list;
     }
-    public boolean satisfyAtom(String firstVal,String secondVal, String atom) {
+    public static  boolean satisfyAtom(String firstVal,String secondVal, String atom) {
         if(atom.contains("!=")){
             return !firstVal.equals(secondVal);
         } else if(atom.contains(">")||atom.contains("<")){
@@ -53,7 +52,7 @@ public class Tools implements Serializable {
     }
 
 
-    public boolean satisfyInEqualAtom(String firstVal, String secondVal, String atom) {
+    public static boolean satisfyInEqualAtom(String firstVal, String secondVal, String atom) {
         int first_val_int = Integer.parseInt(firstVal);
         int second_val_int = Integer.parseInt(secondVal);
         if(atom.contains("=")&&firstVal.equals(secondVal))return true;
@@ -65,7 +64,7 @@ public class Tools implements Serializable {
         return false;
     }
 
-    public String getAttrByPre(String key,int attrPos) {//attrPos=1 那么匹配t1的属性
+    public static String getAttrByPre(String key,int attrPos) {//attrPos=1 那么匹配t1的属性
         String attr = null;
         String regx = "\\.[a-zA-Z_]+";//会匹配四次 attr_a是第一次 attr_b是第2次
         Pattern r = Pattern.compile(regx);
@@ -100,7 +99,7 @@ public class Tools implements Serializable {
         return map;
     }
 
-    public String getValueByAttr(Object object, String attr, String table) {
+    public static String getValueByAttr(Object object, String attr, String table) {
         String res = null;
         switch (table){
             case "hospital":
@@ -114,6 +113,25 @@ public class Tools implements Serializable {
                 break;
             case "flight":
                 res = ((FlightBean)object).get(attr);
+                break;
+        }
+        return res;
+    }
+
+    public Integer getIntValueByAttr(Object object, String attr, String table) {
+        Integer res = null;
+        switch (table){
+            case "hospital":
+                res = ((HospitalBean)object).getInt(attr);
+                break;
+            case "spstock":
+                res = ((SPStockBean)object).getInt(attr);
+                break;
+            case "tax":
+                res = ((TaxBean)object).getInt(attr);
+                break;
+            case "flight":
+                res = ((FlightBean)object).getInt(attr);
                 break;
         }
         return res;
@@ -140,7 +158,7 @@ public class Tools implements Serializable {
      * 寻找非递增序列的 第一个小于等于value的元素位置
      * 两个方法，适用于重载
      */
-    public int lowwerBoundByAttr(List<Object> list, List<Integer> ids, String attrD, String value, String table) {
+    public static int lowwerBoundByAttr(List<Object> list, List<Integer> ids, String attrD, String value, String table) {
         int target = Integer.parseInt(value);
         int l = 0,r = ids.size();
         while(l<r){
@@ -152,7 +170,7 @@ public class Tools implements Serializable {
 
         return l;
     }
-    public int lowwerBoundByAttr(List<Object> list, List<Integer> ids, String attrD, String value, String table,boolean isAsc) {
+    public static int lowwerBoundByAttr(List<Object> list, List<Integer> ids, String attrD, String value, String table,boolean isAsc) {
         int target = Integer.parseInt(value);
         int l = 0,r = ids.size();
         while(l<r){
@@ -203,7 +221,7 @@ public class Tools implements Serializable {
         return l;
     }
 
-    public Pair<String,String> getTwoInEqualAtoms(List<String> atomSet, Set<String> otherAtomSet) {
+    public static Pair<String,String> getTwoInEqualAtoms(List<String> atomSet, Set<String> otherAtomSet) {
         String firstAtom = "",secondAtom = "";
         for(String atom:atomSet){
             if(atom.contains(">")||atom.contains("<")){
@@ -216,7 +234,7 @@ public class Tools implements Serializable {
 
         return new Pair<String,String>(firstAtom,secondAtom);
     }
-    public boolean checkTuplePair(List<Object> incList, Integer idLeft, Integer idRight, Set<String> otherAtomSet, String table) {
+    public static boolean checkTuplePair(List<Object> incList, Integer idLeft, Integer idRight, Set<String> otherAtomSet, String table) {
         for(String atom:otherAtomSet){
             String firstAttr = getAttrByPre(atom,1);
             String secondAttr = getAttrByPre(atom,2);
@@ -231,7 +249,7 @@ public class Tools implements Serializable {
     /**
      * IEJoin中并未指定计算offset的方式，只是提出是以线性时间计算
      */
-    public void initOffsetList(List<Object> incList, List<Integer> L1, List<Integer> L1b, List<Integer> offsetX, String X, String Xb,String table,boolean isAsc) {
+    public static void initOffsetList(List<Object> incList, List<Integer> L1, List<Integer> L1b, List<Integer> offsetX, String X, String Xb,String table,boolean isAsc) {
         //L1和L1b要么同为升序要么同为降序
         int pos = 0;
         for(Integer id:L1){
@@ -251,9 +269,11 @@ public class Tools implements Serializable {
                  * 如
                  * 10 5 4  ---》 11  10 6 4
                  * 映射数组应为
-                 * 2 4 4
+                 * 2 3 4
                  */
+                int val2 = Integer.parseInt(getValueByAttr(incList.get(L1b.get(pos)),Xb,table));
                 while(pos<L1b.size()&&Integer.parseInt(getValueByAttr(incList.get(L1b.get(pos)),Xb,table))>val){
+                    val2 = Integer.parseInt(getValueByAttr(incList.get(L1b.get(pos)),Xb,table));
                     pos++;
                 }
             }
@@ -369,11 +389,8 @@ public class Tools implements Serializable {
     }
 
     public boolean isNumeric(String cleanVal) {
-        try {
-            Integer.parseInt(cleanVal);
-        }catch (Exception e){
-//            e.printStackTrace();
-            return false;
+        for(char c:cleanVal.toCharArray()){
+            if(!Character.isDigit(c))return false;
         }
         return true;
     }

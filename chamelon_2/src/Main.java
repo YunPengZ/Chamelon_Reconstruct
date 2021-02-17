@@ -61,27 +61,28 @@ public static void main(String[] args) {
         String taxDcs[] = {
         "t1.State=t2.State&t1.Salary<t2.Salary&t1.Rate>t2.Rate"
         };
-//        String incSize = "30",errorRate = "3",dSize = "20",table="tax";
-//        int type = 3;
-//        int errorAttrNum = 5;//hospital:3,tax:5,spstock
-//        boolean test = true;
-//        String rootPath = "D:\\scientic_project\\chameleon_2\\";
-//        boolean isChoosed = false;
-//        int repairType = 1;
-//        boolean byIndex = true;
-//        boolean onlyDelta = false;//
-//        boolean print  = true;
-        String incSize = args[0],errorRate = args[1],dSize = args[2],table=args[3];
-        int type = Integer.parseInt(args[4]);
-        boolean test = Boolean.parseBoolean(args[5]);
-        String rootPath = args[6];
-        boolean isChoosed = Boolean.parseBoolean(args[7]);
-        boolean byIndex = Boolean.parseBoolean(args[8]);
-        boolean onlyDelta = Boolean.parseBoolean(args[9]);
-        int repairType = Integer.parseInt(args[10]);
-//        dc 应该是从文件当中读取的
-        int errorAttrNum = Integer.parseInt(args[11]);
-        boolean print = Boolean.parseBoolean(args[12]);
+        String incSize = "5",errorRate = "3",dSize = "20",table="spstock";
+        int type = 2;
+        int errorAttrNum = 5;//hospital:3,tax:5,spstock
+        boolean test = true;
+        String rootPath = "D:\\scientic_project\\chameleon_2\\";
+        boolean isChoosed = false;
+        int repairType = 0;
+        boolean byIndex = true;
+        boolean onlyDelta = true;//
+        boolean print  = false;
+        System.out.println("A bin's modify");
+//        String incSize = args[0],errorRate = args[1],dSize = args[2],table=args[3];
+//        int type = Integer.parseInt(args[4]);
+//        boolean test = Boolean.parseBoolean(args[5]);
+//        String rootPath = args[6];
+//        boolean isChoosed = Boolean.parseBoolean(args[7]);
+//        boolean byIndex = Boolean.parseBoolean(args[8]);
+//        boolean onlyDelta = Boolean.parseBoolean(args[9]);
+//        int repairType = Integer.parseInt(args[10]);
+////        dc 应该是从文件当中读取的
+//        int errorAttrNum = Integer.parseInt(args[11]);
+//        boolean print = Boolean.parseBoolean(args[12]);
         Inc inc = new Inc(incSize,errorRate,dSize,table,rootPath,type,repairType,errorAttrNum,test,isChoosed,byIndex,onlyDelta,print);
         inc.holistic("null");
         }

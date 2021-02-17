@@ -65,43 +65,32 @@ public class Repair
         for (Map.Entry<String,String> entry:result.result){
             int tupleId = Integer.parseInt(entry.getKey().split(",")[0]);
             String attr = entry.getKey().split(",")[1];
-            String cleanVal = "";
-            String dirtyVal = "";
-            if(tupleId<dSz){
-                cleanVal = tools.getValueByAttr(indexSet.fileReaderByParams.originList.get(tupleId),attr,table);
-                dirtyVal = cleanVal;//d中的clean 和dirty 两值相同
-            }else{
-                tupleId -=dSz;
-                cleanVal= tools.getValueByAttr(indexSet.fileReaderByParams.cleanList.get(tupleId),attr,table);
-                dirtyVal = tools.getValueByAttr(indexSet.fileReaderByParams.dirtyList.get(tupleId),attr,table);
-            }
-            boolean calcDistance = true;
-            if(entry.getValue().equals("-1")||entry.getValue().equals("")){
-                calcDistance = false;
-            }
-            if(!tools.isNumeric(dirtyVal))calcDistance = false;
-            //无论是否修复正确都要计算mnad 只有赋fv时 不计算
             if(tupleId<dSz){
                 repairInOrigin++;
-                //d中的cell
             }else{
+                tupleId -=dSz;
+                String cleanVal = tools.getValueByAttr(indexSet.fileReaderByParams.cleanList.get(tupleId),attr,table);
+                String dirtyVal = tools.getValueByAttr(indexSet.fileReaderByParams.dirtyList.get(tupleId),attr,table);
+                boolean rightFlag = false;
+                int base = 0;
                 if(!cleanVal.equals(dirtyVal)){
+                    rightFlag = true;
                     if(cleanVal.equals(entry.getValue()))rightRepairInDelta++;
                         //发现并被赋新值的都计分
-                    else if(entry.getValue().equals("-1")||entry.getValue().equals("")){
-                        rightRepairInDelta+=0.5;
-                    }
+                    else if(entry.getValue().equals("-1")||entry.getValue().equals(""))rightRepairInDelta+=0.5;
+                    else rightFlag = false;
+                    if(!tools.isNumeric(cleanVal))continue;//跳过计算距离的部分
+                    int cleanValInt = Integer.parseInt(cleanVal);
+                    int repairValInt = Integer.parseInt(entry.getValue());
+                    int noiseValInt = Integer.parseInt(dirtyVal);
+                    base = cleanValInt-repairValInt;
+                    repairTruthDistance+=Math.abs(cleanValInt-repairValInt);
+                    repairNoiseDistance+=Math.abs(noiseValInt-repairValInt);
+                    truthNoiseDistance +=Math.abs(noiseValInt-cleanValInt);
                 }
-            }
-            if(calcDistance){
-                int cleanValInt = Integer.parseInt(cleanVal);
-                int repairValInt = Integer.parseInt(entry.getValue());
-                int noiseValInt = Integer.parseInt(dirtyVal);
-                int  base = cleanValInt-repairValInt;
-                repairTruthDistance+=Math.abs(cleanValInt-repairValInt);
-                repairNoiseDistance+=Math.abs(noiseValInt-repairValInt);
-                truthNoiseDistance +=Math.abs(noiseValInt-cleanValInt);
-                squareDistance +=(base*base);
+                if(!rightFlag&&tools.isNumeric(cleanVal)){
+                    squareDistance +=(base*base);
+                }
             }
         }
         for(int i = 0;i<80;i++) System.out.print("#");

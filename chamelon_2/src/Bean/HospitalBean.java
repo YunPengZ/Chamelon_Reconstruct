@@ -50,12 +50,6 @@ public class HospitalBean implements Serializable {
     public String get(String para){
 
         String value= null;
-        Method method = null;
-        char[] chars = para.toCharArray();
-        if (chars[0] >= 'a' && chars[0] <= 'z') {
-            chars[0] = (char)(chars[0] - 32);
-        }
-        para = new String(chars);
         try {
             if (para.equals("Id")){
                 return Integer.toString(this.getId());
@@ -106,7 +100,20 @@ public class HospitalBean implements Serializable {
                 return this.getCountryName();
             }
             System.out.println("Hospital unknown param: " + para);
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+        return value;
+    }
 
+    public Integer getInt(String para){
+
+        Integer value= null;
+        try {
+            if (para.equals("Id")){
+                return this.getId();
+            }
+            System.out.println("Hospital unknown param: " + para);
         } catch (SecurityException e) {
             e.printStackTrace();
         }

@@ -28,12 +28,6 @@ public class SPStockBean implements Serializable {
 
     public String get(String para){
         String value= null;
-        Method method = null;
-        char[] chars = para.toCharArray();
-        if (chars[0] >= 'a' && chars[0] <= 'z') {
-            chars[0] = (char)(chars[0] - 32);
-        }
-        para = new String(chars);
         try {
             if (para.equals("Close")) {
                 return Integer.toString(this.getClose());
@@ -62,6 +56,38 @@ public class SPStockBean implements Serializable {
             }
 
             System.out.println("SPStock unknown param: " + para);
+
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+        return value;
+    }
+
+    public Integer getInt(String para){
+        Integer value= null;
+        try {
+            if (para.equals("Close")) {
+                return this.getClose();
+            }
+            if (para.equals("Open")) {
+                return this.getOpen();
+            }
+            if (para.equals("High")) {
+                return this.getHigh();
+            }
+
+            if (para.equals("Id")) {
+                return this.getId();
+            }
+            if (para.equals("Low")) {
+                return this.getLow();
+            }
+            if (para.equals("Volume")) {
+                return this.getVolume();
+            }
+
+            System.out.println("SPStock unknown param: " + para);
+
         } catch (SecurityException e) {
             e.printStackTrace();
         }

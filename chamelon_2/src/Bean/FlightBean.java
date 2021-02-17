@@ -75,12 +75,6 @@ public class FlightBean {
     public String get(String para){
 
         String value= null;
-        Method method = null;
-        char[] chars = para.toCharArray();
-        if (chars[0] >= 'a' && chars[0] <= 'z') {
-            chars[0] = (char)(chars[0] - 32);
-        }
-        para = new String(chars);
         try {
             if (para.equals("DAY_OF_WEEK")){
                 return Integer.toString(this.getDAY_OF_WEEK());
@@ -143,12 +137,71 @@ public class FlightBean {
                 return Integer.toString(this.getARRIVAL_DELAY());
             }
             System.out.println("Flight unknown param: " + para);
-
         } catch (SecurityException e) {
             e.printStackTrace();
         }
         return value;
     }
+
+    public Integer getInt(String para){
+
+        Integer value= null;
+        try {
+            if (para.equals("DAY_OF_WEEK")){
+                return this.getDAY_OF_WEEK();
+            }
+            if (para.equals("FLIGHT_NUMBER")){
+                return this.getFLIGHT_NUMBER();
+            }
+            if (para.equals("SCHEDULED_DEPARTURE")){
+                return this.getSCHEDULED_DEPARTURE();
+            }
+            if (para.equals("DEPARTURE_TIME")){
+                return this.getDEPARTURE_TIME();
+            }
+            if (para.equals("DEPARTURE_DELAY")){
+                return this.getDEPARTURE_DELAY();
+            }
+            if (para.equals("TAXI_OUT")){
+                return this.getTAXI_OUT();
+            }
+            if (para.equals("WHEELS_OFF")){
+                return this.getWHEELS_OFF();
+            }
+            if (para.equals("SCHEDULED_TIME")){
+                return this.getSCHEDULED_TIME();
+            }
+            if (para.equals("ELAPSED_TIME")){
+                return this.getELAPSED_TIME();
+            }
+            if (para.equals("AIR_TIME")){
+                return this.getAIR_TIME();
+            }
+            if (para.equals("DISTANCE")){
+                return this.getDISTANCE();
+            }
+            if (para.equals("WHEELS_ON")){
+                return this.getWHEELS_ON();
+            }
+            if (para.equals("TAXI_IN")){
+                return this.getTAXI_IN();
+            }
+            if (para.equals("SCHEDULED_ARRIVAL")){
+                return this.getSCHEDULED_ARRIVAL();
+            }
+            if (para.equals("ARRIVAL_TIME")){
+                return this.getARRIVAL_TIME();
+            }
+            if (para.equals("ARRIVAL_DELAY")){
+                return this.getARRIVAL_DELAY();
+            }
+            System.out.println("Flight unknown param: " + para);
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+        return value;
+    }
+
     public int getDAY_OF_WEEK() {
         return DAY_OF_WEEK;
     }

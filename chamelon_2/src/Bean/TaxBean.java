@@ -65,13 +65,8 @@ public class TaxBean implements Serializable {
     }
 
     public String get(String para){
-        char[] chars = para.toCharArray();
-        if (chars[0] >= 'a' && chars[0] <= 'z') {
-            chars[0] = (char)(chars[0] - 32);
-        }
-        para = new String(chars);
+
         String value= null;
-        Method method = null;
         try {
             if (para.equals("Id")){
                 return Integer.toString(this.getId());
@@ -123,6 +118,36 @@ public class TaxBean implements Serializable {
             }
             System.out.println("Tax unknown param: " + para);
 
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+
+        return value;
+    }
+
+    public Integer getInt(String para){
+
+        Integer value= null;
+        try {
+            if (para.equals("Id")){
+                return this.getId();
+            }
+            if (para.equals("Salary")){
+                return this.getSalary();
+            }
+            if (para.equals("Rate")){
+                return this.getRate();
+            }
+            if (para.equals("SingleExemp")){
+                return this.getSingleExemp();
+            }
+            if (para.equals("MarriedExemp")){
+                return this.getMarriedExemp();
+            }
+            if (para.equals("ChildExemp")){
+                return this.getChildExemp();
+            }
+            System.out.println("Tax unknown param: " + para);
 
         } catch (SecurityException e) {
             e.printStackTrace();
